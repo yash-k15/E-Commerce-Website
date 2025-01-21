@@ -36,7 +36,7 @@ const OrderListScreen = () => {
                 <td>{orders._id}</td>
                 <td>{orders.user && orders.user.name}</td>
                 <td>{orders.createdAt.substring(0, 10)}</td>
-                <td>{orders.totalPrice}</td>
+                <td>₹{orders.totalPrice}</td>
                 <td>
                   {orders.isPaid ? (
                     orders.paidAt.substring(0, 10)
