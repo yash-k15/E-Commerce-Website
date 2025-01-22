@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import {
   useUpdateProductMutation,
   useGetProductDetailsQuery,
+  useUploadProductImageMutation,
 } from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
@@ -32,6 +33,9 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,24 +53,36 @@ const ProductEditScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     const updatedProduct = {
-        productId,
-        name,
-        price,
-        image,
-        brand,
-        category,
-        countInStock,
-        description,
+      productId,
+      name,
+      price,
+      image,
+      brand,
+      category,
+      countInStock,
+      description,
     };
 
     const result = await updateProduct(updatedProduct);
-    if(result.error) {
-        toast.error(result.error);
+    if (result.error) {
+      toast.error(result.error);
     } else {
-        toast.success('Product updated');
-        navigate('/admin/productlist');
+      toast.success("Product updated");
+      navigate("/admin/productlist");
     }
   };
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+        const res = await uploadProductImage(formData).unwrap();
+        toast.success(res.message);
+        setImage(res.image);
+    } catch (err) {
+        toast.error(err?.data?.message || err.error);
+    }
+  }
 
   return (
     <>
@@ -82,7 +98,7 @@ const ProductEditScreen = () => {
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <Form onSubmit={ submitHandler }>
+          <Form onSubmit={submitHandler}>
             <Form.Group controlId="name" className="my-2">
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -103,7 +119,20 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            {/* image input placeholder */}
+            <Form.Group controlId="image" className="my-2">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Image URL"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                type="file"
+                label="Choose file"
+                onChange={uploadFileHandler}
+              ></Form.Control>
+            </Form.Group>
 
             <Form.Group controlId="brand" className="my-2">
               <Form.Label>Brand</Form.Label>
