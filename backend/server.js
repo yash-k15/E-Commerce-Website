@@ -31,7 +31,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 
-app.get('/api/config/paypal', (req, res) => res.send({clienId: process.env.PAYPAL_CLIENT_ID}));
+app.get('/api/config/paypal', (req, res) => res.send({clientId: process.env.PAYPAL_CLIENT_ID}));
 
 const __dirname = path.resolve(); // Set __dirname to current directory
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
