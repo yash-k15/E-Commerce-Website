@@ -81,6 +81,7 @@ const ProductScreen = () => {
         </Message>
       ) : (
         <>
+        <title>{product.name}</title>
           <Row>
             <Col md={5}>
               <Image src={product.image} alt={product.name} fluid />
