@@ -48,9 +48,7 @@ const OrderScreen = () => {
         });
       };
       if (order && !order.isPaid) {
-        if (!window.paypal) {
           loadPayPalScript();
-        }
       }
     }
   }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
